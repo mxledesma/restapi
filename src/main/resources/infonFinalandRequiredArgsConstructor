@@ -1,0 +1,32 @@
+Here's a concise breakdown of the final keyword in your code and its impact:
+Key Differences: Using final vs. Removing It
+1. Role of final in Dependency Injection
+
+    With final:
+    The @RequiredArgsConstructor (from Lombok) generates a constructor that initializes all final fields. This ensures Spring injects the ExpenseRepository and ModelMapper dependencies automatically.
+
+    java
+    // Lombok generates this constructor:
+    public ExpenseServiceImpl(ExpenseRepository expenseRepository, ModelMapper modelMapper) {
+        this.expenseRepository = expenseRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    Without final:
+    Lombok ignores non-final fields, so no constructor is generated. Without explicit dependency injection (e.g., @Autowired), both fields will be null, causing a NullPointerException at runtime.
+
+2. Immutability
+
+    With final:
+    Fields cannot be reassigned after initialization, which is a best practice for Spring service components (prevents accidental modification).
+
+    Without final:
+    Fields can be reassigned, increasing the risk of bugs (e.g., accidentally overwriting the repository reference).
+
+3. Will the Code Work Without final?
+
+    No, unless you manually add:
+
+        A constructor with @Autowired, or
+
+        Field injections with @Autowired (not recommended for required dependencies).
